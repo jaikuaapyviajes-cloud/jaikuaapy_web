@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JaikuaaPy Viajes</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:#f5f7f5; color:#1a2e1a; }
+  header { background:#1B7A3E; padding:0 1.5rem; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.2); }
+  .header-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:68px; gap:1rem; }
+  .logo-wrap { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .logo-svg { width:48px; height:48px; }
+  .logo-text { display:flex; flex-direction:column; line-height:1; }
+  .logo-name { font-family:'Montserrat',sans-serif; font-weight:800; font-style:italic; font-size:20px; color:#fff; letter-spacing:1px; text-transform:uppercase; }
+  .logo-name span { color:#6DC537; }
+  .logo-sub { font-size:9px; font-weight:600; color:#a8d8b8; letter-spacing:3px; text-transform:uppercase; margin-top:2px; }
+  nav { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
+  nav button { background:none; border:none; color:#c8e6d5; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; padding:8px 14px; cursor:pointer; border-radius:8px; transition:all 0.2s; white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; }
+  nav button:hover { color:#fff; background:rgba(255,255,255,0.15); }
+  nav button.active { color:#fff; background:rgba(109,197,55,0.3); border-bottom:2px solid #6DC537; }
+  .btn-wa-header { background:#25d366!important; color:#fff!important; display:flex; align-items:center; gap:6px; border-radius:8px!important; }
+  .btn-wa-header:hover { background:#1db954!important; }
+  .hero { background:linear-gradient(160deg,#1B7A3E 0%,#145c2e 50%,#0f4522 100%); padding:3.5rem 2rem 3rem; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 100%,rgba(109,197,55,0.15) 0%,transparent 70%); }
+  .hero-content { position:relative; z-index:1; }
+  .hero h1 { font-family:'Montserrat',sans-serif; font-weight:800; font-style:italic; font-size:32px; color:#fff; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:1px; text-shadow:0 2px 8px rgba(0,0,0,0.3); }
+  .hero h1 span { color:#6DC537; }
+  .hero p { color:#b8dfc8; font-size:14px; max-width:580px; margin:0 auto; font-weight:500; line-height:1.6; }
+  .hero-badge { display:inline-block; background:rgba(109,197,55,0.2); border:1px solid rgba(109,197,55,0.4); color:#6DC537; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:5px 14px; border-radius:20px; margin-bottom:1rem; }
+  .tab-section { display:none; }
+  .tab-section.active { display:block; }
+  .section-wrap { max-width:1100px; margin:0 auto; padding:2.5rem 1.5rem; }
+  .coming-soon { text-align:center; padding:5rem 2rem; }
+  .coming-soon .icon { font-size:52px; margin-bottom:1rem; }
+  .coming-soon h2 { font-size:24px; font-weight:800; font-style:italic; color:#1B7A3E; text-transform:uppercase; margin-bottom:0.5rem; }
+  .coming-soon p { font-size:14px; color:#888; }
+  .dest-card { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 4px 24px rgba(27,122,62,0.1); margin-bottom:2rem; border:1px solid rgba(27,122,62,0.1); }
+  .card-gallery { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:200px 200px; gap:3px; background:#1B7A3E; }
+  .card-gallery .gimg { width:100%; height:100%; object-fit:cover; cursor:pointer; transition:opacity 0.2s,transform 0.3s; display:block; }
+  .card-gallery .gimg:hover { opacity:0.88; transform:scale(1.02); }
+  .card-gallery .main-img { grid-row:1/3; }
+  .img-placeholder { width:100%; height:100%; background:linear-gradient(135deg,#1B7A3E,#6DC537); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px; cursor:pointer; transition:opacity 0.2s; }
+  .img-placeholder:hover { opacity:0.85; }
+  .img-placeholder .ph-icon { font-size:28px; }
+  .img-placeholder .ph-text { color:rgba(255,255,255,0.8); font-size:11px; font-weight:600; text-align:center; padding:0 8px; }
+  .card-body { padding:2rem 2rem 1.5rem; }
+  .card-header { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; }
+  .card-title { font-family:'Montserrat',sans-serif; font-size:24px; font-weight:800; font-style:italic; color:#1B7A3E; text-transform:uppercase; letter-spacing:0.5px; line-height:1.2; }
+  .card-meta { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.6rem; }
+  .badge { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-green { background:#e8f7ee; color:#1B7A3E; }
+  .badge-amber { background:#fef3e2; color:#9a5f0a; }
+  .badge-price { background:linear-gradient(135deg,#1B7A3E,#145c2e); color:#6DC537; font-size:20px; font-weight:800; font-style:italic; padding:10px 20px; border-radius:12px; white-space:nowrap; font-family:'Montserrat',sans-serif; }
+  .badge-price small { font-size:11px; color:#a8d8b8; display:block; font-style:normal; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+  .card-desc { font-size:14px; line-height:1.75; color:#444; margin-bottom:1.5rem; border-left:3px solid #6DC537; padding-left:1rem; }
+  .info-tabs { display:flex; gap:0; border-bottom:2px solid #e8f0e8; margin-bottom:1.5rem; overflow-x:auto; }
+  .info-tab { background:none; border:none; padding:10px 18px; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#999; cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; white-space:nowrap; transition:all 0.2s; }
+  .info-tab.active { color:#1B7A3E; border-bottom-color:#6DC537; }
+  .info-panel { display:none; }
+  .info-panel.active { display:block; }
+  .itinerary-day { margin-bottom:1.5rem; }
+  .day-header { display:flex; align-items:center; gap:10px; margin-bottom:0.75rem; }
+  .day-badge { background:linear-gradient(135deg,#1B7A3E,#6DC537); color:#fff; font-size:11px; font-weight:800; padding:5px 12px; border-radius:6px; white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; }
+  .day-title { font-size:14px; font-weight:700; color:#1B7A3E; }
+  .timeline { list-style:none; padding-left:1rem; border-left:2px solid #d4edde; }
+  .timeline li { position:relative; padding:6px 0 6px 1.25rem; font-size:13px; line-height:1.6; color:#444; }
+  .timeline li::before { content:''; position:absolute; left:-5px; top:14px; width:8px; height:8px; background:#6DC537; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px #6DC537; }
+  .time-label { font-weight:700; color:#1B7A3E; margin-right:6px; }
+  .includes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.6rem; }
+  .include-item { display:flex; align-items:flex-start; gap:8px; background:#f0faf4; border-radius:8px; padding:10px 12px; font-size:13px; color:#1a2e1a; border-left:3px solid #6DC537; font-weight:500; }
+  .include-item .ic { font-size:15px; flex-shrink:0; margin-top:1px; }
+  .cta-row { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid #e8f0e8; align-items:center; }
+  .btn-wa { background:#25d366; color:#fff; border:none; padding:13px 24px; border-radius:10px; font-family:'Montserrat',sans-serif; font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:8px; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.2s; }
+  .btn-wa:hover { background:#1db954; transform:translateY(-1px); }
+  .btn-form { background:#1B7A3E; color:#fff; border:none; padding:13px 24px; border-radius:10px; font-family:'Montserrat',sans-serif; font-size:14px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.2s; }
+  .btn-form:hover { background:#145c2e; transform:translateY(-1px); }
+  .cupos-badge { background:#fff3cd; color:#856404; font-size:12px; font-weight:700; padding:8px 14px; border-radius:8px; text-transform:uppercase; letter-spacing:0.5px; }
+  .subtab-bar { background:#fff; border-bottom:2px solid #e8f0e8; padding:0 1.5rem; position:sticky; top:68px; z-index:90; }
+  .subtab-bar-inner { max-width:1100px; margin:0 auto; display:flex; gap:0; overflow-x:auto; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:#fff; border-radius:20px; width:100%; max-width:520px; max-height:92vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+  .modal-header { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid #e8f0e8; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,#1B7A3E,#145c2e); border-radius:20px 20px 0 0; }
+  .modal-header h2 { font-size:18px; color:#fff; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; font-style:italic; }
+  .modal-close { background:none; border:none; font-size:26px; cursor:pointer; color:rgba(255,255,255,0.8); line-height:1; }
+  .modal-close:hover { color:#fff; }
+  .modal-body { padding:1.5rem; }
+  .dest-info-pill { background:#e8f7ee; border-radius:8px; padding:10px 14px; margin-bottom:1.25rem; font-size:13px; color:#1B7A3E; font-weight:700; border-left:3px solid #6DC537; }
+  .form-group { margin-bottom:0.9rem; }
+  .form-group label { display:block; font-size:12px; font-weight:700; color:#1B7A3E; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
+  .form-group input,.form-group select,.form-group textarea { width:100%; padding:10px 12px; border:1.5px solid #d4edde; border-radius:8px; font-size:14px; font-family:'Montserrat',sans-serif; background:#fafcfa; color:#1a2e1a; transition:border 0.2s; }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline:none; border-color:#1B7A3E; background:#fff; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+  .btn-submit { width:100%; background:linear-gradient(135deg,#1B7A3E,#6DC537); color:#fff; border:none; padding:14px; border-radius:10px; font-family:'Montserrat',sans-serif; font-size:14px; font-weight:800; cursor:pointer; margin-top:0.5rem; text-transform:uppercase; letter-spacing:1px; transition:opacity 0.2s; }
+  .btn-submit:hover { opacity:0.9; }
+  .success-msg { display:none; text-align:center; padding:2.5rem 1.5rem; }
+  .success-msg .check { font-size:52px; margin-bottom:1rem; }
+  .success-msg h3 { color:#1B7A3E; font-size:20px; font-weight:800; text-transform:uppercase; margin-bottom:0.5rem; }
+  .success-msg p { color:#666; font-size:14px; line-height:1.6; }
+  .btn-close-success { margin-top:1.25rem; padding:10px 28px; background:#1B7A3E; color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; text-transform:uppercase; }
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; padding:2rem; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:88vh; border-radius:12px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
+  .lightbox-close { position:absolute; top:1.25rem; right:1.5rem; color:#fff; font-size:36px; cursor:pointer; background:none; border:none; line-height:1; }
+  footer { background:#0f3d20; color:#a8d8b8; text-align:center; padding:2rem; margin-top:1rem; font-size:13px; }
+  footer strong { color:#6DC537; }
+  @media(max-width:680px){
+    .card-gallery{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+    .card-gallery .main-img{grid-row:auto;grid-column:1/3;height:200px;}
+    .card-gallery .gimg:not(.main-img),.card-gallery .img-placeholder:not(.main-img){height:110px;}
+    .hero h1{font-size:22px;}
+    nav button{font-size:11px;padding:6px 8px;}
+    .logo-name{font-size:16px;}
+    .card-body{padding:1.25rem;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="https://drive.google.com/uc?export=view&id=1ngvGFbelenpT-LFErss1iYYodc9CSkCz" alt="JaikuaaPy Logo" class="logo-svg" style="object-fit:contain;" onerror="this.style.display='none'">
+      <div class="logo-text">
+        <div class="logo-name">Jaikuaa<span>Py</span></div>
+        <div class="logo-sub">Viajes</div>
+      </div>
+    </div>
+    <nav>
+      <button class="active" onclick="showTab('interno',this)">🇵🇾 Turismo Interno</button>
+      <button onclick="showTab('terrestre',this)">🚌 Terrestre</button>
+      <button onclick="showTab('aereo',this)">✈️ Aéreo</button>
+      <button class="btn-wa-header" onclick="openWhatsApp('Hola Nathi! Me interesa información sobre los viajes de JaikuaaPy 🌿')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Turismo Responsable · Paraguay</div>
+    <h1>Anímate a conocer <span>lo recóndito</span> de tu país 🇵🇾</h1>
+    <p>Viajar no es solo elegir un destino, es entender el contexto que lo rodea. Experiencias reales, naturaleza y cultura auténtica.</p>
+  </div>
+</div>
+
+<!-- TURISMO INTERNO -->
+<div id="tab-interno" class="tab-section active">
+  <div class="section-wrap">
+
+    <!-- CHACO -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <img class="gimg main-img" src="https://drive.google.com/uc?export=view&id=1t7vMBUSGRS7xxscj19HME5G-Y-o6B-4W" alt="Laberinto Vegetal" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-placeholder main-img" style="display:none"><span class="ph-icon">🌵</span><span class="ph-text">Laberinto Vegetal</span></div>
+        <img class="gimg" src="https://drive.google.com/uc?export=view&id=15kXVz_qPpyGfgQoutvX9BeaFM51rudXr" alt="Cielo estrellado" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-placeholder" style="display:none"><span class="ph-icon">🌌</span><span class="ph-text">Cielo estrellado</span></div>
+        <img class="gimg" src="https://drive.google.com/uc?export=view&id=1ja3SfJkCvLe0d6Z3cJ2CoJOS1eRWlzQk" alt="Museo Fernheim" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-placeholder" style="display:none"><span class="ph-icon">🏛️</span><span class="ph-text">Museo Fernheim</span></div>
+        <img class="gimg" src="https://drive.google.com/uc?export=view&id=1mH8mx6lhcmZKzZuZ3sQuLbwTAcX_hH3N" alt="Laguna Capitán" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-placeholder" style="display:none"><span class="ph-icon">🦅</span><span class="ph-text">Laguna Capitán</span></div>
+        <img class="gimg" src="https://drive.google.com/uc?export=view&id=1Wxu64M0MiEZD0o5aDQy68qY4giCspdlq" alt="Flamencos" onclick="openLightbox(this.src)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-placeholder" style="display:none"><span class="ph-icon">🦩</span><span class="ph-text">Lagunas Saladas</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🌵 Chaco Paraguayo – Lagunas Saladas</div>
+            <div class="card-meta">
+              <span class="badge badge-green">📅 5 al 7 de Junio</span>
+              <span class="badge badge-amber">3 días · 2 noches</span>
+              <span class="badge badge-green">🦩 Flamencos & Naturaleza</span>
+            </div>
+          </div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 520.000</div>
+        </div>
+        <p class="card-desc">Viví una experiencia única recorriendo el corazón del Chaco Paraguayo, entre naturaleza, historia y paisajes que parecen de otro mundo. Visitaremos Filadelfia, museos históricos, el famoso Laberinto Vegetal, reservas naturales y las increíbles Lagunas Saladas, hogar de flamencos y aves migratorias. También conoceremos Tucos Factory con degustación de mermeladas artesanales. ✨🇵🇾</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'itinerario-chaco')">🗓️ Programa de viaje</button>
+          <button class="info-tab" onclick="showInfo(this,'incluye-chaco')">✅ Qué incluye</button>
+        </div>
+        <div id="itinerario-chaco" class="info-panel active">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1 — Viernes</span><span class="day-title">Salida hacia el Chaco</span></div><ul class="timeline"><li><span class="time-label">22:30 hs</span>Punto de encuentro en Shopping Multiplaza.</li><li><span class="time-label">23:00 hs</span>Salida puntual con destino a Filadelfia.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2 — Sábado</span><span class="day-title">Historia, cultura y naturaleza 🌅</span></div><ul class="timeline"><li><span class="time-label">06:00 hs</span>Parada para desayuno.</li><li><span class="time-label">07:00 hs</span>Museo Fernheim y Parque de los Recuerdos.</li><li><span class="time-label">09:00 hs</span>Laberinto Vegetal de Filadelfia.</li><li><span class="time-label">11:00 hs</span>Tucos Factory – degustación de mermeladas artesanales.</li><li><span class="time-label">🍽️</span>Almuerzo incluido en Filadelfia.</li><li><span class="time-label">13:00 hs</span>Centro Interpretativo del Gran Chaco Americano.</li><li><span class="time-label">14:00 hs</span>Laguna Capitán – fauna, flora y aves migratorias.</li><li><span class="time-label">16:30 hs</span>Fortín y Laguna Salada Isla Po'i. Atardecer chaqueño.</li><li><span class="time-label">18:00 hs</span>Hotel en Filadelfia. Noche libre.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3 — Domingo</span><span class="day-title">Flamencos y Lagunas Saladas 🦩</span></div><ul class="timeline"><li><span class="time-label">06:00–07:30 hs</span>Desayuno buffet y check-out.</li><li><span class="time-label">08:00 hs</span>Chaco Lodge y Laguna Salada de Flamencos. Senderismo aprox. 3.5 km.</li><li><span class="time-label">11:30 hs</span>Avistamiento de flamencos y fauna silvestre.</li><li><span class="time-label">13:00 hs</span>Almuerzo en Cruce Pioneros (no incluido).</li><li><span class="time-label">15:00 hs</span>Retorno a Asunción.</li><li><span class="time-label">21:30 hs aprox.</span>Llegada y fin de servicios.</li></ul></div>
+        </div>
+        <div id="incluye-chaco" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Bus de turismo con AC y sanitario</div>
+            <div class="include-item"><span class="ic">🏨</span>Hospedaje en Filadelfia – hab. dobles, triples y cuádruples</div>
+            <div class="include-item"><span class="ic">🍽️</span>Almuerzo del sábado en Filadelfia</div>
+            <div class="include-item"><span class="ic">🥐</span>Desayuno buffet del domingo</div>
+            <div class="include-item"><span class="ic">🌿</span>Museo Fernheim y Parque de los Recuerdos</div>
+            <div class="include-item"><span class="ic">🌀</span>Entrada al Laberinto Vegetal</div>
+            <div class="include-item"><span class="ic">🍯</span>Tucos Factory con degustación</div>
+            <div class="include-item"><span class="ic">🦩</span>Laguna Capitán y Lagunas Saladas de Flamencos</div>
+            <div class="include-item"><span class="ic">🌅</span>Fortín histórico Isla Po'i</div>
+            <div class="include-item"><span class="ic">🐦</span>Avistamiento de aves en Chaco Lodge</div>
+            <div class="include-item"><span class="ic">🧉</span>Refrigerio para tereré a bordo</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Guías y coordinadores durante todo el viaje</div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa el viaje al Chaco Paraguayo del 5 al 7 de Junio 🌵 ¿Quedan cupos?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Reservar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Chaco Paraguayo – Lagunas Saladas','5 al 7 de Junio','Gs 520.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERRO CORÁ -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">⛰️</span><span class="ph-text">Cerro Corá · Amanecer</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">💦</span><span class="ph-text">Salto Don Alberto</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌿</span><span class="ph-text">Granja Francisca</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌄</span><span class="ph-text">Ybytyruzú · Panorámica</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏊</span><span class="ph-text">Piscina Natural</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🌿 Cerro Corá + Salto Don Alberto</div>
+            <div class="card-meta">
+              <span class="badge badge-green">📅 Domingo 7 de Junio</span>
+              <span class="badge badge-amber">1 día · Colonia Independencia</span>
+              <span class="badge badge-green">⛰️ Trekking & Naturaleza</span>
+            </div>
+          </div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 220.000</div>
+        </div>
+        <p class="card-desc">Escapada única al corazón del Ybytyruzú. Ascenderemos al Cerro Corá para ver el amanecer, visitaremos la Granja Francisca y finalizaremos en el Salto Don Alberto, una cascada de aguas cristalinas perfecta para refrescarse. ✨🇵🇾</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'itinerario-cerra')">🗓️ Programa de viaje</button>
+          <button class="info-tab" onclick="showInfo(this,'incluye-cerra')">✅ Qué incluye</button>
+        </div>
+        <div id="itinerario-cerra" class="info-panel active">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1 — Sábado</span><span class="day-title">Salida nocturna</span></div><ul class="timeline"><li><span class="time-label">22:00 hs</span>Presentación en Shopping Multiplaza km 5.</li><li><span class="time-label">22:30 hs</span>Salida rumbo a Colonia Independencia.</li><li><span class="time-label">🚍</span>Segundo punto: Super 6 – San Lorenzo.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2 — Domingo</span><span class="day-title">Aventura en el Ybytyruzú 🌄</span></div><ul class="timeline"><li><span class="time-label">03:00 hs</span>Llegada a Granja Francisca. Ingreso incluido. Inicio del ascenso al Cerro Corá.</li><li><span class="time-label">⛰️</span>Caminata nocturna para ver el amanecer. Dificultad: bajo/medio · Duración: aprox. 2:30 hs. <em style="color:#1B7A3E;font-weight:600;">Llevar linterna frontal 🔦</em></li><li><span class="time-label">09:00 hs</span>Descenso y tiempo libre en Granja Francisca: piscina, mini zoológico y áreas recreativas.</li><li><span class="time-label">13:00 hs</span>Almuerzo opcional en la granja (no incluido).</li><li><span class="time-label">14:00 hs</span>Salida hacia el Salto Don Alberto.</li><li><span class="time-label">17:30 hs</span>Retorno a Asunción.</li><li><span class="time-label">23:00 hs aprox.</span>Llegada. Fin de servicios.</li></ul></div>
+        </div>
+        <div id="incluye-cerra" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta con AC y sanitario</div>
+            <div class="include-item"><span class="ic">🎟️</span>Ingreso a Granja Francisca, Cerro Corá y Cascada Don Alberto</div>
+            <div class="include-item"><span class="ic">🏊</span>Acceso a piscina y mini zoológico de rescate</div>
+            <div class="include-item"><span class="ic">🚿</span>Sanitarios y duchas en Granja Francisca</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Guías y coordinadores durante toda la experiencia</div>
+            <div class="include-item"><span class="ic">🌄</span>Trekking al amanecer en la Cordillera del Ybytyruzú</div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Cerro Corá + Salto Don Alberto del 7 de Junio ⛰️ ¿Quedan cupos?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Reservar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Cerro Corá + Salto Don Alberto','Domingo 7 de Junio','Gs 220.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRES KANDÚ -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">⛰️</span><span class="ph-text">Cerro Tres Kandú · Cima</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌄</span><span class="ph-text">Amanecer desde la cima</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌿</span><span class="ph-text">Sendero nocturno</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">📸</span><span class="ph-text">842 msnm</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏔️</span><span class="ph-text">Cordillera del Ybytyruzú</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div>
+            <div class="card-title">⛰️ Cerro Tres Kandú – El techo de Paraguay</div>
+            <div class="card-meta">
+              <span class="badge badge-green">📅 20 y 21 de Junio</span>
+              <span class="badge badge-amber">842 msnm · Dificultad media/alta</span>
+              <span class="badge badge-green">🌄 Trekking nocturno</span>
+            </div>
+          </div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 230.000</div>
+        </div>
+        <p class="card-desc">Conquistá el punto más alto del Paraguay con 842 metros de altura. Escalada nocturna para recibir el amanecer desde la cima, rodeados por los increíbles paisajes de la Cordillera del Ybytyruzú. Adrenalina, conexión con la naturaleza y momentos únicos. ✨</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'itinerario-kandu')">🗓️ Programa de viaje</button>
+          <button class="info-tab" onclick="showInfo(this,'incluye-kandu')">✅ Qué incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'info-kandu')">📌 Info importante</button>
+        </div>
+        <div id="itinerario-kandu" class="info-panel active">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1 — Sáb 20/06</span><span class="day-title">Salida nocturna</span></div><ul class="timeline"><li><span class="time-label">20:30 hs</span>Presentación frente al Shopping Multiplaza.</li><li><span class="time-label">21:00 hs</span>Salida rumbo al Cerro Tres Kandú. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2 — Dom 21/06</span><span class="day-title">Ascenso al gigante 🌄</span></div><ul class="timeline"><li><span class="time-label">03:00 hs</span>Llegada a la base. Equipamiento e inicio del ascenso nocturno.</li><li><span class="time-label">⛰️</span>Subida con linternas 🔦 · Dificultad: medio/alto · Duración aprox. 2:30 hs.</li><li><span class="time-label">🥐</span>Desayuno energético y guantes incluidos.</li><li><span class="time-label">05:50 hs aprox.</span>Llegada a la cima — amanecer más impresionante del Ybytyruzú.</li><li><span class="time-label">09:30–10:00 hs</span>Inicio del descenso.</li><li><span class="time-label">🍽️</span>Traslado a Villarrica para almorzar (no incluido).</li><li><span class="time-label">22:00 hs aprox.</span>Llegada a Asunción. Fin de servicios.</li></ul></div>
+        </div>
+        <div id="incluye-kandu" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Ómnibus de turismo con AC y sanitario</div>
+            <div class="include-item"><span class="ic">🎟️</span>Tickets de ingreso al Cerro Tres Kandú</div>
+            <div class="include-item"><span class="ic">🧤</span>Guantes para escalar</div>
+            <div class="include-item"><span class="ic">🥐</span>Desayuno energético para la subida</div>
+            <div class="include-item"><span class="ic">🧉</span>Refrigerio a bordo</div>
+            <div class="include-item"><span class="ic">🛡️</span>Cobertura de seguro durante la actividad</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador y guía durante todo el viaje</div>
+            <div class="include-item"><span class="ic">🌄</span>Trekking nocturno y amanecer en el techo de Paraguay</div>
+          </div>
+        </div>
+        <div id="info-kandu" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem;">💰 Inversión</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Precio:</strong> Gs 230.000</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 100.000</p></div>
+            <div style="background:#fff8e1;border-radius:10px;padding:1rem;border-left:3px solid #f0a500;"><p style="font-weight:700;font-size:13px;color:#9a5f0a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem;">⚠️ Condiciones</p><p style="font-size:13px;color:#555;line-height:1.7;">Seña <strong>no reembolsable ni transferible</strong>. Pago total hasta el <strong>jueves al mediodía</strong> antes de la salida.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa el Cerro Tres Kandú del 20 y 21 de Junio ⛰️ ¿Quedan cupos?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Reservar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Cerro Tres Kandú','20 y 21 de Junio','Gs 230.000 · Seña Gs 100.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RUTA DE LOS SALTOS -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">💦</span><span class="ph-text">Saltos del Monday</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏭</span><span class="ph-text">Itaipú Binacional</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🐆</span><span class="ph-text">Sendero Tekotopa</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🎢</span><span class="ph-text">Aventura Monday</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🦔</span><span class="ph-text">Fauna silvestre</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div>
+            <div class="card-title">💦 Ruta de los Saltos – Itaipú + Tekotopa + Monday</div>
+            <div class="card-meta">
+              <span class="badge badge-green">📅 Consultar fechas</span>
+              <span class="badge badge-amber">1 día · Alto Paraná</span>
+              <span class="badge badge-green">🐆 Naturaleza & Aventura</span>
+            </div>
+          </div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 220.000</div>
+        </div>
+        <p class="card-desc">Itaipú Binacional, senderismo en Tekotopa con avistamiento de yaguareté y capibaras, y los imponentes Saltos del Monday. Un viaje ideal para conectar con la naturaleza más salvaje del Paraguay. 🇵🇾✨</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'itinerario-saltos')">🗓️ Programa de viaje</button>
+          <button class="info-tab" onclick="showInfo(this,'incluye-saltos')">✅ Qué incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'info-saltos')">📌 Info importante</button>
+        </div>
+        <div id="itinerario-saltos" class="info-panel active">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Salida — Noche</span><span class="day-title">Partida hacia Alto Paraná</span></div><ul class="timeline"><li><span class="time-label">23:30 hs</span>Encuentro frente al Shopping Multiplaza.</li><li><span class="time-label">00:00 hs</span>Salida rumbo a Itaipú. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día de aventura</span><span class="day-title">Itaipú · Tekotopa · Monday 🌅</span></div><ul class="timeline"><li><span class="time-label">06:30 hs</span>Parada en chipería para desayuno (no incluido).</li><li><span class="time-label">08:00 hs</span>Itaipú Binacional. Recorrido con guías locales.</li><li><span class="time-label">09:30 hs</span>Tekotopa. Caminata por senderos con avistamiento de capibaras y fauna silvestre.</li><li><span class="time-label">12:00 hs</span>Aventura Monday. Almuerzo opcional (aprox. 30.000 Gs).</li><li><span class="time-label">🎢</span>Opcionales: tirolesa, cañonismo, recorridos panorámicos.</li><li><span class="time-label">16:00 hs</span>Salida de regreso a Asunción.</li><li><span class="time-label">23:00 hs aprox.</span>Llegada y fin de servicios.</li></ul></div>
+        </div>
+        <div id="incluye-saltos" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta en bus de turismo</div>
+            <div class="include-item"><span class="ic">🎟️</span>Acceso a Itaipú, sendero Tekotopa y Aventura Monday</div>
+            <div class="include-item"><span class="ic">🐾</span>Avistamiento de animales silvestres</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinadores durante todo el viaje</div>
+          </div>
+          <div style="margin-top:1rem;background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;">
+            <p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.6rem;">🎒 Qué llevar</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:#444;"><span>👕 Ropa cómoda</span><span>👟 Calzado cómodo</span><span>🪪 Cédula o pasaporte</span><span>💧 Agua o tereré</span><span>🧴 Protector solar y repelente</span><span>📷 Cámara o celular</span></div>
+          </div>
+        </div>
+        <div id="info-saltos" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Inversión</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Precio:</strong> Gs 220.000</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Niños 5–8 años:</strong> Gs 180.000</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 100.000 (no reembolsable)</p></div>
+            <div style="background:#fff8e1;border-radius:10px;padding:1rem;border-left:3px solid #f0a500;"><p style="font-weight:700;font-size:13px;color:#9a5f0a;text-transform:uppercase;margin-bottom:0.75rem;">⚠️ Condiciones</p><p style="font-size:13px;color:#555;line-height:1.7;">Avisar con mínimo <strong>5 días</strong> si no podés viajar. Horarios pueden modificarse.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa la Ruta de los Saltos – Itaipú + Tekotopa + Monday 💦 ¿Cuándo es la próxima salida?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Reservar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Ruta de los Saltos – Itaipú + Tekotopa + Monday','Consultar fechas','Gs 220.000 · Seña Gs 100.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELLO SENATUR -->
+    <div style="background:#fff;border:1px solid #d4edde;border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <div style="font-size:32px;flex-shrink:0;">🏅</div>
+      <div>
+        <p style="font-weight:700;font-size:14px;color:#1B7A3E;text-transform:uppercase;letter-spacing:0.5px;">Agencia habilitada por SENATUR · Resolución Nº 809</p>
+        <p style="font-size:13px;color:#555;margin-top:3px;">Operamos hace <strong>6 años</strong> siendo pioneros en turismo interno en Paraguay. Tu viaje está en manos de profesionales comprometidos con un turismo responsable y transformador. 🇵🇾</p>
+      </div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:2px dashed #a8d8b8;border-radius:14px;color:#1B7A3E;background:#f0faf4;">
+      <div style="font-size:28px;margin-bottom:0.4rem;">+</div>
+      <p style="font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;">Próximamente más destinos de Turismo Interno</p>
+      <p style="font-size:12px;color:#888;margin-top:4px;">¡Seguí sumando destinos cuando los tengas listos!</p>
+    </div>
+  </div>
+</div>
+
+<!-- EMISIVO TERRESTRE -->
+<div id="tab-terrestre" class="tab-section">
+  <div class="subtab-bar">
+    <div class="subtab-bar-inner">
+      <button class="info-tab active" id="sub-2026-btn" onclick="showSubTab('2026')" style="padding:14px 20px;font-size:13px;">🗓️ Temporada 2026</button>
+      <button class="info-tab" id="sub-2027-btn" onclick="showSubTab('2027')" style="padding:14px 20px;font-size:13px;">✨ Temporada 2027</button>
+      <button class="info-tab" id="sub-brasil2027-btn" onclick="showSubTab('brasil2027')" style="padding:14px 20px;font-size:13px;">🇧🇷 Brasil 2027</button>
+    </div>
+  </div>
+
+  <!-- TEMPORADA 2026 -->
+  <div id="terrestre-2026" class="section-wrap">
+    <!-- ITATÍ, BARILOCHE, GRAMADO, SALTA, CAMBORIÚ — tarjetas resumidas para no exceder el límite -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🙏</span><span class="ph-text">Basílica de Itatí · Argentina</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">⛪</span><span class="ph-text">Catedral de Corrientes</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌊</span><span class="ph-text">Costanera · Río Paraná</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏛️</span><span class="ph-text">Circuito 7 Iglesias</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🇦🇷</span><span class="ph-text">Paso de la Patria</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🙏 Peregrinación a la Virgen de Itatí</div><div class="card-meta"><span class="badge badge-green">📅 12 al 14 de Junio</span><span class="badge badge-amber">3 días · Corrientes, Argentina</span><span class="badge badge-green">⛪ Fe & Cultura</span></div></div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 980.000</div>
+        </div>
+        <p class="card-desc">Fe, cultura y conexión espiritual en uno de los destinos religiosos más importantes de Argentina. Circuito de las 7 iglesias, Basílica de Itatí y momentos de paz frente al río Paraná. 🇦🇷✨</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'itin-itati')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-itati')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-itati')">📌 Info</button>
+        </div>
+        <div id="itin-itati" class="info-panel active">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1 — Viernes</span><span class="day-title">Salida hacia Corrientes</span></div><ul class="timeline"><li><span class="time-label">22:30 hs</span>Salida con destino a Corrientes – Argentina.</li><li><span class="time-label">📍</span><strong>Asunción:</strong> Shopping Mariano.</li><li><span class="time-label">📍</span><strong>Interior:</strong> Plaza Central de Altos. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2 — Sábado</span><span class="day-title">Tour religioso e histórico ⛪</span></div><ul class="timeline"><li><span class="time-label">07:00 hs</span>Llegada a Corrientes. Desayuno incluido.</li><li><span class="time-label">09:00 hs</span>Catedral, Iglesia San Francisco, La Merced, 7 Iglesias y Costanera.</li><li><span class="time-label">🍴</span>Almuerzo opcional (aprox. 30.000 pesos argentinos).</li><li><span class="time-label">🏨</span>Check-in en hotel céntrico. Noche libre.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3 — Domingo</span><span class="day-title">Basílica de Itatí 🙏</span></div><ul class="timeline"><li><span class="time-label">🍽️</span>Desayuno en el hotel.</li><li><span class="time-label">08:30 hs</span>Salida rumbo a la Basílica de Nuestra Señora de Itatí. Nos acompañará el Padre Claudio Javier Figueredo.</li><li><span class="time-label">13:00 hs</span>Almuerzo en Itatí (incluido, sin bebidas).</li><li><span class="time-label">14:30 hs</span>Paso de la Patria. Retorno a Paraguay.</li><li><span class="time-label">🌙</span>Llegada y fin de servicios.</li></ul></div>
+        </div>
+        <div id="inc-itati" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Bus con asientos reclinables y sanitario</div>
+            <div class="include-item"><span class="ic">🏨</span>1 noche en hotel céntrico de Corrientes</div>
+            <div class="include-item"><span class="ic">🍽️</span>2 desayunos incluidos</div>
+            <div class="include-item"><span class="ic">🍴</span>Almuerzo del domingo en Itatí (sin bebidas)</div>
+            <div class="include-item"><span class="ic">⛪</span>Tour religioso e histórico · 7 Iglesias</div>
+            <div class="include-item"><span class="ic">✨</span>Visita a la Basílica de Itatí y Paso de la Patria</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+        </div>
+        <div id="inf-itati" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Inversión</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Precio:</strong> Gs 980.000</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 300.000</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula vigente.<br>• Menores con un padre: permiso del menor.<br>• Menores con ambos padres: libreta de familia.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa la Peregrinación a Itatí del 12 al 14 de Junio 🙏 ¿Quedan cupos?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Reservar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Peregrinación a la Virgen de Itatí','12 al 14 de Junio','Gs 980.000 · Seña Gs 300.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BARILOCHE -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🏔️</span><span class="ph-text">Bariloche nevado</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">❄️</span><span class="ph-text">Cerro Catedral</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🚠</span><span class="ph-text">Cerro Campanario</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🍫</span><span class="ph-text">Fábrica de chocolates</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏞️</span><span class="ph-text">Lago Nahuel Huapi</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">❄️ Invierno en Bariloche 2026</div><div class="card-meta"><span class="badge badge-green">📅 Jun · Jul · Ago · Sep</span><span class="badge badge-amber">9 días · Bariloche, Argentina</span><span class="badge badge-green">🏔️ Nieve & Montaña</span></div></div>
+          <div class="badge-price"><small>Desde por persona</small>Gs 2.950.000</div>
+        </div>
+        <p class="card-desc">Montañas nevadas, lagos increíbles, chocolates y excursiones únicas en una de las ciudades más mágicas de Argentina. ✨🇦🇷</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-bari')">📅 Fechas y tarifas</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-bari')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'opc-bari')">🌟 Opcionales</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-bari')">📌 Info</button>
+        </div>
+        <div id="fechas-bari" class="info-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+            <div style="border:1px solid #d4edde;border-radius:12px;overflow:hidden;"><div style="background:linear-gradient(135deg,#1B7A3E,#2d6a4a);padding:10px 14px;"><span style="font-weight:700;font-size:14px;color:#fff;">❄️ Junio</span></div><div style="padding:12px 14px;font-size:13px;color:#444;line-height:1.8;"><p>📆 31/05 al 09/06</p><p>📆 10/06 al 19/06</p><p>📆 20/06 al 29/06</p><p style="margin-top:8px;">🏨 Tierra Gaucha: <strong style="color:#1B7A3E;">Gs 2.950.000</strong></p><p>🏨 Hotel Plaza: <strong style="color:#1B7A3E;">Gs 3.250.000</strong></p></div></div>
+            <div style="border:1px solid #d4edde;border-radius:12px;overflow:hidden;"><div style="background:linear-gradient(135deg,#0f4d8a,#1a6bbf);padding:10px 14px;"><span style="font-weight:700;font-size:14px;color:#fff;">🌨️ Julio</span></div><div style="padding:12px 14px;font-size:13px;color:#444;line-height:1.8;"><p>📆 30/06 al 09/07</p><p>📆 12/07 al 21/07</p><p>📆 16/07 al 25/07</p><p style="margin-top:8px;">🏨 Tierra Gaucha: <strong style="color:#1B7A3E;">Gs 3.790.000</strong></p><p>🏨 Hotel Plaza: <strong style="color:#1B7A3E;">Gs 4.190.000</strong></p></div></div>
+            <div style="border:1px solid #d4edde;border-radius:12px;overflow:hidden;"><div style="background:linear-gradient(135deg,#0f4d8a,#1a6bbf);padding:10px 14px;"><span style="font-weight:700;font-size:14px;color:#fff;">🌨️ Agosto</span></div><div style="padding:12px 14px;font-size:13px;color:#444;line-height:1.8;"><p>📆 01/08 al 10/08</p><p>📆 11/08 al 20/08</p><p>📆 22/08 al 31/08</p><p style="margin-top:8px;">🏨 Tierra Gaucha: <strong style="color:#1B7A3E;">Gs 3.790.000</strong></p><p>🏨 Hotel Plaza: <strong style="color:#1B7A3E;">Gs 4.190.000</strong></p></div></div>
+            <div style="border:1px solid #d4edde;border-radius:12px;overflow:hidden;"><div style="background:linear-gradient(135deg,#1B7A3E,#6DC537);padding:10px 14px;"><span style="font-weight:700;font-size:14px;color:#fff;">🌤️ Septiembre</span></div><div style="padding:12px 14px;font-size:13px;color:#444;line-height:1.8;"><p>📆 01/09 al 10/09</p><p>📆 11/09 al 20/09</p><p>📆 21/09 al 30/09</p><p style="margin-top:8px;">🏨 Tierra Gaucha: <strong style="color:#1B7A3E;">Gs 3.350.000</strong></p><p>🏨 Hotel Plaza: <strong style="color:#1B7A3E;">Gs 3.790.000</strong></p></div></div>
+          </div>
+        </div>
+        <div id="inc-bari" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta en bus de turismo</div>
+            <div class="include-item"><span class="ic">🏨</span>1 noche en Buenos Aires + 4 noches en Bariloche</div>
+            <div class="include-item"><span class="ic">🍽️</span>1 desayuno en Bs.As. + 4 desayunos en Bariloche</div>
+            <div class="include-item"><span class="ic">🌄</span>Circuito Chico, Cerro Catedral y Campanario</div>
+            <div class="include-item"><span class="ic">🍫</span>Visita a fábrica de chocolates</div>
+            <div class="include-item"><span class="ic">❄️</span>Julio y Agosto: 2 días de ropa de nieve incluidos</div>
+            <div class="include-item"><span class="ic">🎁</span>Obsequio de la agencia</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+        </div>
+        <div id="opc-bari" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚠</span>Cerro Campanario · aprox. $10.000</div>
+            <div class="include-item"><span class="ic">🚡</span>Cerro Otto · aprox. $24.000</div>
+            <div class="include-item"><span class="ic">⛷️</span>Cerro Catedral (teleférico) · aprox. $28.000</div>
+            <div class="include-item"><span class="ic">🍺</span>Cervecería Patagonia · aprox. $17.000</div>
+            <div class="include-item"><span class="ic">⛸️</span>Patinaje sobre hielo · aprox. $20.000</div>
+            <div class="include-item"><span class="ic">🌳</span>Bosque Arrayanes e Isla Victoria · aprox. $130.000</div>
+            <div class="include-item"><span class="ic">🛣️</span>San Martín de los Andes · 7 Lagos · aprox. $70.000</div>
+            <div class="include-item"><span class="ic">🧥</span>Ropa de nieve · aprox. $15.000/día</div>
+          </div>
+        </div>
+        <div id="inf-bari" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 300.000 (no reembolsable)</p><p style="font-size:14px;color:#333;margin-top:4px;"><strong>Viático:</strong> desde Gs 2.500.000</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula o pasaporte.<br>• Menores con ambos padres: cédula + cert. nacimiento.<br>• Menores con uno o ningún padre: permiso visado.</p></div>
+          </div>
+          <div style="background:#fff3cd;border-radius:10px;padding:1rem;border-left:3px solid #f0a500;font-size:13px;color:#555;line-height:1.6;">👶 <strong>0–3:</strong> gratis sin asiento · <strong>4 años:</strong> Gs 1.000.000 solo asiento · <strong>Desde 5:</strong> tarifa normal · <strong>Equipaje:</strong> 1 maleta 20kg + 1 bolso de mano</div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Invierno en Bariloche 2026 ❄️ ¿Podés darme info?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Invierno en Bariloche 2026','Jun · Jul · Ago · Sep','Desde Gs 2.950.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMADO -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🌲</span><span class="ph-text">Gramado · Brasil</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌊</span><span class="ph-text">Parque Caracol</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌉</span><span class="ph-text">SkyGlass Canela</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">❄️</span><span class="ph-text">Snowland</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🍫</span><span class="ph-text">Fábrica de chocolates</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🇧🇷 Gramado & Canela 2026</div><div class="card-meta"><span class="badge badge-green">📅 Julio · Septiembre</span><span class="badge badge-amber">7 días · Sur de Brasil</span><span class="badge badge-green">🌲 Naturaleza & Cultura</span></div></div>
+          <div class="badge-price"><small>Desde por persona</small>Gs 2.390.000</div>
+        </div>
+        <p class="card-desc">Parques temáticos, cascadas, fábricas de chocolates, miradores y ciudades de estilo europeo rodeadas de naturaleza. 💛🇧🇷</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-grama')">📅 Fechas</button>
+          <button class="info-tab" onclick="showInfo(this,'itin-grama')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-grama')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-grama')">📌 Info</button>
+        </div>
+        <div id="fechas-grama" class="info-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:1rem;">
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;color:#444;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">❄️ Julio</p><p>📆 12 al 18 de Julio</p><p>📆 19 al 25 de Julio</p><p style="margin-top:6px;font-weight:700;color:#1B7A3E;">Gs 2.390.000</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;color:#444;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">🌸 Septiembre</p><p>📆 21 al 27 de Septiembre</p><p style="margin-top:6px;font-weight:700;color:#1B7A3E;">Gs 2.390.000</p></div>
+          </div>
+          <div style="background:#fff3cd;border-radius:10px;padding:0.9rem 1rem;border-left:3px solid #f0a500;font-size:13px;color:#555;line-height:1.7;">👶 <strong>0–3:</strong> sin costo · 🧒 <strong>4–9 años:</strong> Gs 1.950.000 · 👦 <strong>Desde 10:</strong> tarifa normal · 🛏️ <strong>Single:</strong> +Gs 1.700.000</div>
+        </div>
+        <div id="itin-grama" class="info-panel">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1</span><span class="day-title">Salida</span></div><ul class="timeline"><li><span class="time-label">05:00 hs</span>Presentación frente al Shopping Multiplaza.</li><li><span class="time-label">06:00 hs</span>Salida rumbo a Gramado & Canela. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2</span><span class="day-title">Llegada a Canela 🌆</span></div><ul class="timeline"><li><span class="time-label">🏨</span>Llegada, alojamiento y tour de bienvenida con guía local.</li><li><span class="time-label">🌃</span>Noche libre en Canela.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3</span><span class="day-title">Parque Caracol & SkyGlass 🌲</span></div><ul class="timeline"><li><span class="time-label">🍽️</span>Desayuno en el hotel.</li><li><span class="time-label">🌊</span>Parque Caracol, fábrica de chocolates con degustación, SkyGlass Canela (pasarela de vidrio a 360 m).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 4</span><span class="day-title">Snowland & Mini Mundo ❄️</span></div><ul class="timeline"><li><span class="time-label">🍽️</span>Desayuno en el hotel.</li><li><span class="time-label">☃️</span>Opcional: Snowland. Opcional: Mini Mundo. Fábrica de cristales.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 5</span><span class="day-title">Opcionales & experiencias 🚂</span></div><ul class="timeline"><li><span class="time-label">🚂</span>Opcional: Tren Maria Fumaça por Bento Gonçalves.</li><li><span class="time-label">🎈</span>Opcional: Globo aerostático (aprox. 45 min).</li><li><span class="time-label">⛪</span>Noche: show de luces en Catedral de Piedra.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 6</span><span class="day-title">Nova Petrópolis & retorno 🌿</span></div><ul class="timeline"><li><span class="time-label">🧳</span>Check-out. Visita Nova Petrópolis: Laberinto Verde, fábrica de calzados Dakota. Retorno a Asunción.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 7</span><span class="day-title">Llegada 🏁</span></div><ul class="timeline"><li><span class="time-label">🏁</span>Llegada a Asunción y fin de servicios.</li></ul></div>
+        </div>
+        <div id="inc-grama" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta en bus de turismo</div>
+            <div class="include-item"><span class="ic">🏨</span>4 noches en hotel 3 estrellas</div>
+            <div class="include-item"><span class="ic">🍽️</span>4 desayunos buffet</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>City Tour con guía local</div>
+            <div class="include-item"><span class="ic">🌉</span>Traslados a SkyGlass, Snowland, Nova Petrópolis y Parque Caracol</div>
+            <div class="include-item"><span class="ic">🍫</span>Visita a fábrica de chocolates y bodega</div>
+            <div class="include-item"><span class="ic">👟</span>Fábrica de calzados Dakota</div>
+            <div class="include-item"><span class="ic">🎁</span>Obsequio de la agencia</div>
+          </div>
+          <div style="margin-top:1rem;background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.6rem;">🌟 Opcionales (en reales)</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:#444;"><span>🌊 Parque Caracol · ~R$100</span><span>🌉 SkyGlass · ~R$170</span><span>❄️ Snowland · ~R$250</span><span>🏰 Mini Mundo · ~R$100</span><span>🚂 Tren Maria Fumaça · ~R$400</span><span>🎈 Globo aerostático · ~R$800</span></div></div>
+        </div>
+        <div id="inf-grama" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva</p><p style="font-size:14px;color:#333;"><strong>Precio:</strong> Gs 2.390.000</p><p style="font-size:14px;color:#333;margin-top:4px;"><strong>Seña:</strong> Gs 300.000 (no reembolsable)</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula vigente y/o pasaporte.<br>• Menores con ambos padres: cert. de nacimiento.<br>• Menores con uno o ningún padre: permiso original y duplicado.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Gramado & Canela 2026 🇧🇷 ¿Podés darme info?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Gramado & Canela 2026','Julio · Septiembre','Gs 2.390.000 · Seña Gs 300.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALTA & JUJUY -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🌈</span><span class="ph-text">Cerro de los 7 Colores</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏜️</span><span class="ph-text">Quebrada de las Conchas</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🧂</span><span class="ph-text">Salinas Grandes · 4.170 msnm</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🍷</span><span class="ph-text">Cafayate · Ruta del Vino</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏔️</span><span class="ph-text">Quebrada de Humahuaca</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🏜️ Salta & Jujuy 2026</div><div class="card-meta"><span class="badge badge-green">📅 Jun · Jul · Ago · Sep · Oct · Nov · Dic</span><span class="badge badge-amber">7 días · Norte Argentino</span><span class="badge badge-green">🌈 Cultura & Paisajes</span></div></div>
+          <div class="badge-price"><small>Desde por persona</small>Gs 2.090.000</div>
+        </div>
+        <p class="card-desc">Salta, Jujuy, Purmamarca, Cafayate, Salinas Grandes y Quebrada de Humahuaca. Paisajes únicos de Sudamérica llenos de cultura, gastronomía y colores. 🌈🇦🇷</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-salta')">📅 Fechas</button>
+          <button class="info-tab" onclick="showInfo(this,'itin-salta')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-salta')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-salta')">📌 Info</button>
+        </div>
+        <div id="fechas-salta" class="info-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.6rem;margin-bottom:1rem;">
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:10px 12px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:11px;text-transform:uppercase;margin-bottom:4px;">🌄 Junio</p><p>07 al 13</p><p style="font-weight:700;color:#1B7A3E;margin-top:4px;">Gs 2.090.000</p></div>
+            <div style="border:2px solid #1a6bbf;border-radius:10px;padding:10px 12px;font-size:13px;background:#f0f6ff;"><p style="font-weight:700;color:#0f4d8a;font-size:11px;text-transform:uppercase;margin-bottom:4px;">❄️ Julio (alta temp.)</p><p>12 al 18 · 19 al 25</p><p style="font-weight:700;color:#0f4d8a;margin-top:4px;">Gs 2.290.000</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:10px 12px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:11px;text-transform:uppercase;margin-bottom:4px;">☀️ Agosto</p><p>09 al 15</p><p style="font-weight:700;color:#1B7A3E;margin-top:4px;">Gs 2.090.000</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:10px 12px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:11px;text-transform:uppercase;margin-bottom:4px;">🌸 Septiembre</p><p>13 al 19 · 21 al 27</p><p style="font-weight:700;color:#1B7A3E;margin-top:4px;">Gs 2.090.000</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:10px 12px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:11px;text-transform:uppercase;margin-bottom:4px;">🍂 Oct · 🌿 Nov · 🎄 Dic</p><p>Oct: 11/17 · Nov: 08/14 · Dic: 06/12</p><p style="font-weight:700;color:#1B7A3E;margin-top:4px;">Gs 2.090.000</p></div>
+          </div>
+          <div style="background:#fff3cd;border-radius:10px;padding:0.9rem 1rem;border-left:3px solid #f0a500;font-size:13px;color:#555;line-height:1.7;">👶 <strong>0–3:</strong> sin costo · 🧒 <strong>4–5:</strong> Gs 1.000.000 · 👦 <strong>6–9:</strong> 15% desc. · 👨 <strong>Desde 10:</strong> tarifa normal · 🛏️ <strong>Single:</strong> +50%</div>
+        </div>
+        <div id="itin-salta" class="info-panel">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1</span><span class="day-title">Salida desde Asunción</span></div><ul class="timeline"><li><span class="time-label">09:00 hs</span>Presentación en Shopping Multiplaza.</li><li><span class="time-label">10:00 hs</span>Salida rumbo a Salta & Jujuy. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2</span><span class="day-title">Llegada a Salta 🌆</span></div><ul class="timeline"><li><span class="time-label">🙏</span>Visita a la Virgen del Cerro. Check-in hotel céntrico.</li><li><span class="time-label">🌃</span>Tarde libre: Mercado artesanal, Catedral, Peatonal y El Portezuelo. Opcional: Teleférico (~$20.000).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3</span><span class="day-title">Cafayate & Ruta del Vino 🍷</span></div><ul class="timeline"><li><span class="time-label">05:30 hs</span>Salida rumbo a Cafayate. Quebrada de las Conchas, Anfiteatro, Garganta del Diablo.</li><li><span class="time-label">🍷</span>Ruta del Vino: bodegas y degustaciones. Almuerzo no incluido.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 4</span><span class="day-title">Jujuy & Salinas Grandes 🏔️</span></div><ul class="timeline"><li><span class="time-label">05:30 hs</span>Salida rumbo a Jujuy.</li><li><span class="time-label">🌈</span>Purmamarca, Cerro de los 7 Colores y Salinas Grandes a 4.170 msnm.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 5</span><span class="day-title">Humahuaca 🌄</span></div><ul class="timeline"><li><span class="time-label">06:30 hs</span>Tour por Quebrada de Humahuaca. Opcional: Cerro de los 14 Colores (~$45.000).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 6</span><span class="day-title">City Tour & Retorno 🏛️</span></div><ul class="timeline"><li><span class="time-label">07:00 hs</span>Check-out. City Tour por lugares históricos de Salta. Retorno a Paraguay.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 7</span><span class="day-title">Llegada 🏁</span></div><ul class="timeline"><li><span class="time-label">🏁</span>Llegada y fin de servicios.</li></ul></div>
+        </div>
+        <div id="inc-salta" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta con refrigerio a bordo</div>
+            <div class="include-item"><span class="ic">🏨</span>4 noches de alojamiento en hotel seleccionado</div>
+            <div class="include-item"><span class="ic">🍽️</span>4 desayunos buffet</div>
+            <div class="include-item"><span class="ic">🏔️</span>Tour Jujuy · Salinas Grandes · Purmamarca · 7 Colores</div>
+            <div class="include-item"><span class="ic">🏜️</span>Quebrada de las Conchas · Garganta del Diablo</div>
+            <div class="include-item"><span class="ic">🍷</span>Tour Cafayate y Ruta del Vino</div>
+            <div class="include-item"><span class="ic">🛍️</span>Mercado de Artesanos</div>
+            <div class="include-item"><span class="ic">🧭</span>Todos los tours con guía local</div>
+            <div class="include-item"><span class="ic">🎁</span>Obsequio de la agencia</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+        </div>
+        <div id="inf-salta" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Temp. normal:</strong> Gs 2.090.000</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Julio:</strong> Gs 2.290.000</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 400.000 (no reembolsable)</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula vigente y/o pasaporte.<br>• Menores con ambos padres: cert. de nacimiento.<br>• Menores con uno o ningún padre: permiso original y duplicado.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Salta & Jujuy 2026 🌈 ¿Podés darme info?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Salta & Jujuy 2026','Jun–Dic','Desde Gs 2.090.000 · Seña Gs 400.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMBORIÚ 2026 -->
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🌴</span><span class="ph-text">Camboriú · Brasil</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌊</span><span class="ph-text">Praia Itapema</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">💦</span><span class="ph-text">Praia Palmas</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏖️</span><span class="ph-text">Praia Mariscal</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🎢</span><span class="ph-text">Beto Carrero World</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🌴 Camboriú 2026</div><div class="card-meta"><span class="badge badge-green">📅 Nov · Dic 2026</span><span class="badge badge-amber">8 días · Sur de Brasil</span><span class="badge badge-green">🌊 Playas & Diversión</span></div></div>
+          <div class="badge-price"><small>Precio por persona</small>Gs 2.890.000</div>
+        </div>
+        <p class="card-desc">Praia Itapema, Praia Palmas, Praia Mariscal y opcionales increíbles como Beto Carrero World, teleférico y Barco Pirata. Todo el verano brasileño con comodidad. 🌊✨</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-cambo')">📅 Fechas</button>
+          <button class="info-tab" onclick="showInfo(this,'itin-cambo')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-cambo')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-cambo')">📌 Info</button>
+        </div>
+        <div id="fechas-cambo" class="info-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:1rem;">
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">🌿 Noviembre</p><p>📆 14 al 21 de Noviembre</p><p style="margin-top:6px;font-weight:700;color:#1B7A3E;">Gs 2.890.000</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">🎄 Diciembre</p><p>📆 15 al 22 de Diciembre</p><p style="margin-top:6px;font-weight:700;color:#1B7A3E;">Gs 2.890.000</p></div>
+          </div>
+          <div style="background:#f0faf4;border-radius:10px;padding:0.9rem 1rem;border-left:3px solid #6DC537;font-size:13px;color:#444;line-height:1.7;">🏨 Hotel Rieger o similar · Hab. dobles o triples · Single con costo adicional</div>
+          <div style="margin-top:0.75rem;background:#fff3cd;border-radius:10px;padding:0.9rem 1rem;border-left:3px solid #f0a500;font-size:13px;color:#555;line-height:1.7;">👶 <strong>0–3:</strong> sin costo · 🧒 <strong>4–5:</strong> Gs 1.000.000 · 👦 <strong>6–9:</strong> 10% OFF · 👨 <strong>Desde 10:</strong> tarifa normal</div>
+        </div>
+        <div id="itin-cambo" class="info-panel">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1</span><span class="day-title">Salida desde Asunción</span></div><ul class="timeline"><li><span class="time-label">09:00 hs</span>Presentación detrás del Shopping Multiplaza.</li><li><span class="time-label">10:00 hs</span>Salida en bus semicama con AC, toilette, TV/DVD y refrigerios. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Días 1–2</span><span class="day-title">Llegada y check-in 🏨</span></div><ul class="timeline"><li><span class="time-label">🏨</span>Llegada a Camboriú. Check-in en Hotel Rieger o similar.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3</span><span class="day-title">Praia Itapema 🌊</span></div><ul class="timeline"><li><span class="time-label">09:00 hs</span>Tour a Praia Itapema — arena dorada y aguas en tonos verdes y azules.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 4</span><span class="day-title">Praia Palmas 🌴</span></div><ul class="timeline"><li><span class="time-label">08:30 hs</span>Traslado a Praia Palmas — aguas turquesas y ambiente tranquilo.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 5</span><span class="day-title">Praia Mariscal ☀️</span></div><ul class="timeline"><li><span class="time-label">08:00 hs</span>Traslado a Praia Mariscal. Transfer interno no incluido (aprox. R$50).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 6</span><span class="day-title">Opcionales 🎡</span></div><ul class="timeline"><li><span class="time-label">🎢</span>Opcional: Beto Carrero World. Otros: Teleférico, Barco Pirata, Unipraias, Acuario.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 7</span><span class="day-title">Retorno 🚍</span></div><ul class="timeline"><li><span class="time-label">🍽️</span>Desayuno y check-out. Retorno a Asunción.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 8</span><span class="day-title">Llegada 🏁</span></div><ul class="timeline"><li><span class="time-label">🏁</span>Llegada a Asunción y fin de servicios.</li></ul></div>
+        </div>
+        <div id="inc-cambo" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Traslado ida y vuelta en bus de turismo</div>
+            <div class="include-item"><span class="ic">🏨</span>5 noches de hospedaje</div>
+            <div class="include-item"><span class="ic">🍽️</span>5 desayunos buffet</div>
+            <div class="include-item"><span class="ic">🌊</span>Tours a Praia Itapema, Palmas y Mariscal</div>
+            <div class="include-item"><span class="ic">🎢</span>Traslado a Beto Carrero World (desde 20 personas)</div>
+            <div class="include-item"><span class="ic">🎁</span>Obsequio de la agencia</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+          <div style="margin-top:1rem;background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.6rem;">💸 Opcionales (en reales)</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:#444;"><span>🏴‍☠️ Barco Pirata · ~R$85</span><span>✨ Cristo Luz · ~R$70</span><span>🎡 Rueda Gigante · ~R$75</span><span>🎢 Beto Carrero · ~R$250</span><span>🐠 Acuario · ~R$85</span><span>🚡 Teleférico · ~R$75</span></div></div>
+        </div>
+        <div id="inf-cambo" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva</p><p style="font-size:14px;color:#333;margin-bottom:4px;"><strong>Precio:</strong> Gs 2.890.000</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 300.000 (no reembolsable)</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula o pasaporte.<br>• Menores con ambos padres: cert. de nacimiento.<br>• Menores con uno o ningún padre: permiso visado.<br>• 💉 Vacunación fiebre amarilla.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Camboriú 2026 🌴 ¿Podés darme info?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Camboriú 2026','14/11 o 15/12','Gs 2.890.000 · Seña Gs 300.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:2rem;border:2px dashed #a8d8b8;border-radius:14px;color:#1B7A3E;background:#f0faf4;">
+      <div style="font-size:28px;margin-bottom:0.4rem;">+</div>
+      <p style="font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;">Próximamente más destinos Temporada 2026</p>
+    </div>
+  </div>
+
+  <!-- TEMPORADA 2027 -->
+  <div id="terrestre-2027" class="section-wrap" style="display:none;">
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🌴</span><span class="ph-text">Playa Bombinhas · Brasil</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌊</span><span class="ph-text">Playa Mariscal</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌅</span><span class="ph-text">Morro do Macaco · Amanecer</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏖️</span><span class="ph-text">Canto Grande</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🚤</span><span class="ph-text">Barco pirata opcional</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🌴 Bombinhas 2027</div><div class="card-meta"><span class="badge badge-green">📅 Enero · Febrero 2027</span><span class="badge badge-amber">8 días · Sur de Brasil</span><span class="badge badge-green">🌊 Playa & Aventura</span></div></div>
+          <div class="badge-price"><small>Desde por persona</small>Gs 2.690.000</div>
+        </div>
+        <p class="card-desc">Aguas cristalinas, playas increíbles y ambiente relajado. Amaneceres únicos frente al mar, peña grupal y los mejores paisajes del sur de Brasil. ☀️🌊</p>
+        <div style="background:#fff3cd;border-radius:10px;padding:10px 14px;margin-bottom:1.25rem;border-left:3px solid #f0a500;font-size:13px;color:#854f0b;font-weight:600;">⚠️ Tarifas válidas señando hasta el 15 de mayo. Luego los precios aumentan.</div>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-bombi')">📅 Fechas y tarifas</button>
+          <button class="info-tab" onclick="showInfo(this,'itin-bombi')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-bombi')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-bombi')">📌 Info</button>
+        </div>
+        <div id="fechas-bombi" class="info-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-bottom:1rem;">
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">🌞 Enero 2027</p><p>📆 08 al 15 de Enero</p></div>
+            <div style="border:1px solid #d4edde;border-radius:10px;padding:12px 14px;font-size:13px;"><p style="font-weight:700;color:#1B7A3E;font-size:12px;text-transform:uppercase;margin-bottom:6px;">❤️ Febrero 2027</p><p>📆 07 al 14 de Febrero</p></div>
+          </div>
+          <div style="border:1px solid #d4edde;border-radius:12px;overflow:hidden;margin-bottom:1rem;">
+            <div style="background:linear-gradient(135deg,#1B7A3E,#2d6a4a);padding:10px 14px;"><p style="font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;">🏨 Tarifas por tipo de alojamiento</p></div>
+            <div style="padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;font-size:13px;">
+              <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🏠 Depto privado · 3 personas</p><p style="font-size:16px;font-weight:800;color:#1B7A3E;">Gs 2.690.000</p></div>
+              <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🏠 Depto privado · 4–5 personas</p><p style="font-size:16px;font-weight:800;color:#1B7A3E;">Gs 3.370.000</p></div>
+              <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🛏️ Depto compartido</p><p style="font-size:16px;font-weight:800;color:#1B7A3E;">Gs 2.850.000</p></div>
+              <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🚌 Solo traslados</p><p style="font-size:16px;font-weight:800;color:#1B7A3E;">Gs 1.190.000</p></div>
+            </div>
+          </div>
+          <div style="background:#fff3cd;border-radius:10px;padding:0.9rem 1rem;border-left:3px solid #f0a500;font-size:13px;color:#555;line-height:1.7;">👶 <strong>0–3:</strong> sin costo · 🧒 <strong>4–5:</strong> Gs 1.200.000 · 👦 <strong>6–9:</strong> 10% OFF · 👨 <strong>Desde 10:</strong> tarifa completa</div>
+        </div>
+        <div id="itin-bombi" class="info-panel">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1</span><span class="day-title">Salida</span></div><ul class="timeline"><li><span class="time-label">08:30 hs</span>Presentación en Shopping Multiplaza. Salida rumbo a Bombinhas. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2</span><span class="day-title">Llegada & Playa 🌴</span></div><ul class="timeline"><li><span class="time-label">🏨</span>Check-in en departamentos. Tarde libre en la playa.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Días 3–4</span><span class="day-title">Playas & naturaleza</span></div><ul class="timeline"><li><span class="time-label">🌴</span>Día 3: Playa Bombinhas, Canto Grande y Mar de Fora.</li><li><span class="time-label">🚐</span>Día 4: Traslado incluido a Playa Mariscal y 4 Ilhas. Opcional: amanecer en Morro do Macaco.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Días 5–6</span><span class="day-title">Libre & Peña 🎉</span></div><ul class="timeline"><li><span class="time-label">🌊</span>Días libres: barco pirata, safari de playas, Mirador 360° (opcionales).</li><li><span class="time-label">🎶</span>Día 6 — noche: Peña grupal entre viajeros.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Días 7–8</span><span class="day-title">Retorno y llegada 🏁</span></div><ul class="timeline"><li><span class="time-label">🧳</span>Check-out y salida rumbo a Asunción. Llegada día 8.</li></ul></div>
+        </div>
+        <div id="inc-bombi" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Bus de última generación desde Asunción</div>
+            <div class="include-item"><span class="ic">🏨</span>5 noches en departamentos</div>
+            <div class="include-item"><span class="ic">🚐</span>Traslado privado Porto Belo → Bombinhas</div>
+            <div class="include-item"><span class="ic">🌴</span>Traslado a Playa Mariscal y 4 Ilhas</div>
+            <div class="include-item"><span class="ic">🌅</span>Tour amanecer en Morro do Macaco</div>
+            <div class="include-item"><span class="ic">🎉</span>Peña grupal entre viajeros</div>
+            <div class="include-item"><span class="ic">🛡️</span>Seguro ida y vuelta en el bus</div>
+            <div class="include-item"><span class="ic">🎁</span>Recuerdo de la agencia</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+        </div>
+        <div id="inf-bombi" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva & Pagos</p><p style="font-size:13px;color:#333;line-height:1.8;"><strong>Seña:</strong> Gs 400.000 (no reembolsable)<br>💳 Cuotas desde <strong>Gs 200.000</strong>/mes<br>🗓️ Pago total 30 días antes</p></div>
+            <div style="background:#fff3cd;border-radius:10px;padding:1rem;border-left:3px solid #f0a500;"><p style="font-weight:700;font-size:13px;color:#9a5f0a;text-transform:uppercase;margin-bottom:0.75rem;">⚠️ Importante</p><p style="font-size:13px;color:#555;line-height:1.7;">Cupos limitados. Tarifas válidas hasta el <strong>15 de mayo</strong>.</p></div>
+          </div>
+          <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;text-align:center;"><p style="font-size:14px;color:#1B7A3E;font-weight:600;font-style:italic;">✨ No importa con quién viajes… siempre terminás haciendo nuevos amigos.</p></div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Bombinhas 2027 🌴 ¿Podés darme info?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Bombinhas 2027','Enero · Febrero 2027','Desde Gs 2.690.000 · Seña Gs 400.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:2px dashed #a8d8b8;border-radius:14px;color:#1B7A3E;background:#f0faf4;">
+      <div style="font-size:28px;margin-bottom:0.4rem;">+</div>
+      <p style="font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;">Próximamente más destinos Temporada 2027</p>
+    </div>
+  </div>
+
+  <!-- BRASIL 2027 -->
+  <div id="terrestre-brasil2027" class="section-wrap" style="display:none;">
+    <div class="dest-card">
+      <div class="card-gallery">
+        <div class="img-placeholder main-img" onclick="showPhotoNote()"><span class="ph-icon">🌴</span><span class="ph-text">Camboriú · Brasil 2027</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🌊</span><span class="ph-text">Praia Itapema</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">💦</span><span class="ph-text">Praia Palmas</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🏖️</span><span class="ph-text">Praia Mariscal</span></div>
+        <div class="img-placeholder" onclick="showPhotoNote()"><span class="ph-icon">🎢</span><span class="ph-text">Beto Carrero World</span></div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div><div class="card-title">🌴 Camboriú Temporada 2027</div><div class="card-meta"><span class="badge badge-green">📅 Ene · Feb · Mar · Abr · May 2027</span><span class="badge badge-amber">8 días · Sur de Brasil</span><span class="badge badge-green">🌊 Playas & Diversión</span></div></div>
+          <div class="badge-price"><small>Desde por persona</small>Gs 2.690.000</div>
+        </div>
+        <p class="card-desc">Playas paradisíacas, noches libres frente al mar y opcionales únicos. Los paquetes de Enero, Febrero y Semana Santa incluyen cenas buffet. Más de 20 fechas disponibles. 🌊✨</p>
+        <div class="info-tabs">
+          <button class="info-tab active" onclick="showInfo(this,'fechas-cb27')">📅 Fechas y precios</button>
+          <button class="info-tab" onclick="showInfo(this,'itin-cb27')">🗓️ Programa</button>
+          <button class="info-tab" onclick="showInfo(this,'inc-cb27')">✅ Incluye</button>
+          <button class="info-tab" onclick="showInfo(this,'inf-cb27')">📌 Info</button>
+        </div>
+        <div id="fechas-cb27" class="info-panel active">
+          <p style="font-size:13px;color:#666;margin-bottom:1rem;line-height:1.6;">Elegí tu fecha y hotel. <strong>Enero, Febrero y Semana Santa incluyen cenas buffet</strong>. Precios por persona en base doble o triple.</p>
+          <div style="overflow-x:auto;margin-bottom:1rem;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead><tr style="background:linear-gradient(135deg,#1B7A3E,#2d6a4a);color:#fff;"><th style="padding:10px 12px;text-align:left;font-weight:700;text-transform:uppercase;">🏨 Hotel</th><th style="padding:10px 12px;text-align:center;font-weight:700;">☀️ Enero</th><th style="padding:10px 12px;text-align:center;font-weight:700;">🌴 Febrero</th><th style="padding:10px 12px;text-align:center;font-weight:700;">✝️ Sem. Santa</th><th style="padding:10px 12px;text-align:center;font-weight:700;">🌊 Marzo</th><th style="padding:10px 12px;text-align:center;font-weight:700;">🍂 Abr/May</th></tr></thead>
+              <tbody>
+                <tr style="background:#f9fdfb;border-bottom:1px solid #e8f0e8;"><td style="padding:10px 12px;font-weight:600;color:#1B7A3E;">Brasil Express</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.590.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.390.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.390.000</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td></tr>
+                <tr style="background:#fff;border-bottom:1px solid #e8f0e8;"><td style="padding:10px 12px;font-weight:600;color:#1B7A3E;">Centromar</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.890.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.690.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.690.000</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td></tr>
+                <tr style="background:#f9fdfb;border-bottom:1px solid #e8f0e8;"><td style="padding:10px 12px;font-weight:600;color:#1B7A3E;">Ibis Style</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.190.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.890.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">3.890.000</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td></tr>
+                <tr style="background:#fff;border-bottom:1px solid #e8f0e8;"><td style="padding:10px 12px;font-weight:600;color:#1B7A3E;">Ryan</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.390.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.190.000</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td><td style="padding:10px 12px;text-align:center;color:#999;">—</td></tr>
+                <tr style="background:#f9fdfb;"><td style="padding:10px 12px;font-weight:600;color:#1B7A3E;">Rieger</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.490.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.290.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">4.290.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">2.950.000</td><td style="padding:10px 12px;text-align:center;font-weight:700;">2.690.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.5rem;margin-bottom:0.75rem;">
+            <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid #6DC537;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">☀️ Enero</p><p>3, 8, 13, 18, 23 y 28</p></div>
+            <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid #6DC537;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🌴 Febrero</p><p>2, 7, 12, 17 y 22</p></div>
+            <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid #6DC537;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🌊 Marzo</p><p>6 y 13</p></div>
+            <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid #6DC537;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">✝️ Semana Santa</p><p>21 al 28 de Marzo</p></div>
+            <div style="background:#f0faf4;border-radius:8px;padding:10px 12px;font-size:12px;border-left:3px solid #6DC537;"><p style="font-weight:700;color:#1B7A3E;margin-bottom:4px;">🍂 Abril / Mayo</p><p>4 y 9</p></div>
+          </div>
+        </div>
+        <div id="itin-cb27" class="info-panel">
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 1</span><span class="day-title">Salida desde Asunción</span></div><ul class="timeline"><li><span class="time-label">09:00 hs</span>Presentación detrás del Shopping Multiplaza.</li><li><span class="time-label">10:00 hs</span>Salida en bus semicama. 🚍</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 2</span><span class="day-title">Llegada a Camboriú 🏨</span></div><ul class="timeline"><li><span class="time-label">🏖️</span>Check-in en hotel seleccionado. Día libre para paseos.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 3</span><span class="day-title">Praia Itapema 🌊</span></div><ul class="timeline"><li><span class="time-label">09:00 hs</span>Tour a Praia Itapema. 🍴 Cena incluida (Enero, Febrero y Sem. Santa).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 4</span><span class="day-title">Praia Palmas 💦</span></div><ul class="timeline"><li><span class="time-label">08:30 hs</span>Traslado a Praia Palmas. 🍴 Cena incluida (Enero, Febrero y Sem. Santa).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 5</span><span class="day-title">Praia Mariscal ☀️</span></div><ul class="timeline"><li><span class="time-label">08:00 hs</span>Traslado a Praia Mariscal. Transfer interno no incluido (aprox. R$50).</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Día 6</span><span class="day-title">Opcionales 🎡</span></div><ul class="timeline"><li><span class="time-label">🎢</span>Opcional: Beto Carrero World. Otros: Barco Pirata, Teleférico, Unipraias, Acuario, Cristo Luz.</li></ul></div>
+          <div class="itinerary-day"><div class="day-header"><span class="day-badge">Días 7–8</span><span class="day-title">Retorno y llegada 🏁</span></div><ul class="timeline"><li><span class="time-label">🧳</span>Check-out. Retorno a Asunción. Llegada día 8.</li></ul></div>
+        </div>
+        <div id="inc-cb27" class="info-panel">
+          <div class="includes-grid">
+            <div class="include-item"><span class="ic">🚌</span>Todos los traslados en bus de turismo</div>
+            <div class="include-item"><span class="ic">🏨</span>5 noches de hospedaje</div>
+            <div class="include-item"><span class="ic">🍽️</span>5 desayunos buffet</div>
+            <div class="include-item"><span class="ic">🍴</span>5 cenas buffet (Enero, Febrero y Semana Santa)</div>
+            <div class="include-item"><span class="ic">🌊</span>Tours a Praia Itapema, Palmas y Mariscal</div>
+            <div class="include-item"><span class="ic">🎢</span>Traslado a Beto Carrero World (desde 20 personas)</div>
+            <div class="include-item"><span class="ic">🎁</span>Obsequio de la agencia</div>
+            <div class="include-item"><span class="ic">👨‍💼</span>Coordinador durante todo el viaje</div>
+          </div>
+          <div style="margin-top:1rem;background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.6rem;">💸 Opcionales (en reales)</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:#444;"><span>🏴‍☠️ Barco Pirata · ~R$85</span><span>✨ Cristo Luz · ~R$70</span><span>🎡 Rueda Gigante · ~R$75</span><span>🎢 Beto Carrero · ~R$250</span><span>🐠 Acuario · ~R$85</span><span>🚡 Teleférico · ~R$75</span></div></div>
+        </div>
+        <div id="inf-cb27" class="info-panel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">💰 Reserva</p><p style="font-size:14px;color:#333;"><strong>Seña:</strong> Gs 300.000 por persona (no reembolsable)</p><p style="font-size:12px;color:#888;margin-top:4px;">Base doble o triple</p></div>
+            <div style="background:#f0faf4;border-radius:10px;padding:1rem;border-left:3px solid #6DC537;"><p style="font-weight:700;font-size:13px;color:#1B7A3E;text-transform:uppercase;margin-bottom:0.75rem;">🪪 Documentación</p><p style="font-size:13px;color:#333;line-height:1.7;">• Cédula o pasaporte.<br>• Menores con ambos padres: cert. nacimiento.<br>• Menores con uno o ningún padre: permiso visado.<br>• 💉 Vacunación fiebre amarilla.</p></div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="btn-wa" onclick="openWhatsApp('Hola Nathi! Me interesa Camboriú Temporada 2027 🌴 ¿Podés darme info sobre fechas y hoteles?')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar por WhatsApp</button>
+          <button class="btn-form" onclick="openModal('Camboriú Temporada 2027','Ene · Feb · Mar · Abr · May 2027','Desde Gs 2.690.000 · Seña Gs 300.000')">📝 Formulario de reserva</button>
+          <span class="cupos-badge">⚡ Cupos limitados</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:2px dashed #a8d8b8;border-radius:14px;color:#1B7A3E;background:#f0faf4;">
+      <div style="font-size:28px;margin-bottom:0.4rem;">+</div>
+      <p style="font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;">Próximamente más destinos Brasil 2027</p>
+    </div>
+  </div>
+
+</div><!-- fin tab-terrestre -->
+
+<!-- EMISIVO AEREO -->
+<div id="tab-aereo" class="tab-section">
+  <div class="section-wrap">
+    <div class="coming-soon">
+      <div class="icon">✈️</div>
+      <h2>Turismo Emisivo Aéreo</h2>
+      <p>Próximamente los destinos internacionales con vuelo. ¡Muy pronto!</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header"><h2>📝 Formulario de reserva</h2><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div id="form-wrap">
+        <div id="dest-info" class="dest-info-pill"></div>
+        <p style="font-size:13px;color:#666;margin-bottom:1.25rem;line-height:1.6;">Completá tus datos y nos ponemos en contacto. Los campos con * son obligatorios.</p>
+        <div class="form-row">
+          <div class="form-group"><label>Nombre *</label><input type="text" id="f-nombre" placeholder="Tu nombre"></div>
+          <div class="form-group"><label>Apellido *</label><input type="text" id="f-apellido" placeholder="Tu apellido"></div>
+        </div>
+        <div class="form-group"><label>Cédula de identidad *</label><input type="text" id="f-ci" placeholder="Ej: 1.234.567"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Celular / WhatsApp *</label><input type="tel" id="f-cel" placeholder="09XX XXX XXX"></div>
+          <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="tu@email.com"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Tipo de habitación</label><select id="f-hab"><option value="">Seleccioná</option><option>Doble</option><option>Triple</option><option>Cuádruple</option></select></div>
+          <div class="form-group"><label>Cantidad de personas *</label><input type="number" id="f-cant" min="1" max="10" placeholder="1"></div>
+        </div>
+        <div class="form-group"><label>Comentarios</label><textarea id="f-nota" rows="3" placeholder="Alergias, requerimientos, preguntas..."></textarea></div>
+        <p id="form-error" style="color:#c0392b;font-size:12px;font-weight:600;display:none;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.5px;"></p>
+        <button class="btn-submit" onclick="submitForm()">✓ Enviar reserva</button>
+      </div>
+      <div id="success-wrap" class="success-msg">
+        <div class="check">✅</div>
+        <h3>¡Reserva recibida!</h3>
+        <p>Nos comunicamos pronto para confirmar tu cupo.<br>¡Gracias por elegir <strong>JaikuaaPy</strong>!</p>
+        <button class="btn-close-success" onclick="closeModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close">×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<footer>
+  <p>© 2025 <strong>JaikuaaPy Viajes</strong> · Guía Habilitada Res. 755/2021 · SENATUR Res. 809 · 🇵🇾 Paraguay</p>
+  <p style="margin-top:6px;color:#6DC537;font-size:12px;font-style:italic;">Anímate a conocer lo recóndito de tu país</p>
+</footer>
+
+<script>
+  const reservations = [];
+
+  function showSubTab(year) {
+    ['2026','2027','brasil2027'].forEach(y => {
+      document.getElementById('terrestre-' + y).style.display = y === year ? 'block' : 'none';
+      document.getElementById('sub-' + y + '-btn').classList.toggle('active', y === year);
+    });
+  }
+
+  function showTab(tab, btn) {
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button:not(.btn-wa-header)').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function showInfo(btn, panelId) {
+    const card = btn.closest('.dest-card');
+    card.querySelectorAll('.info-tab').forEach(t => t.classList.remove('active'));
+    card.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+
+  function openWhatsApp(msg) {
+    window.open('https://wa.me/595991000000?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  let currentDest = {};
+  function openModal(dest, fecha, precio) {
+    currentDest = {dest, fecha, precio};
+    document.getElementById('dest-info').textContent = '✈️ ' + dest + ' · ' + fecha + ' · ' + precio;
+    document.getElementById('form-wrap').style.display = 'block';
+    document.getElementById('success-wrap').style.display = 'none';
+    document.getElementById('form-error').style.display = 'none';
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+  function closeModalOutside(e) { if(e.target.id==='modal') closeModal(); }
+
+  function submitForm() {
+    const n=document.getElementById('f-nombre').value.trim();
+    const a=document.getElementById('f-apellido').value.trim();
+    const ci=document.getElementById('f-ci').value.trim();
+    const cel=document.getElementById('f-cel').value.trim();
+    const cant=document.getElementById('f-cant').value.trim();
+    const err=document.getElementById('form-error');
+    if(!n||!a||!ci||!cel||!cant){err.textContent='⚠ Por favor completá todos los campos obligatorios (*)';err.style.display='block';return;}
+    err.style.display='none';
+    const r={id:Date.now(),destino:currentDest.dest,fecha:currentDest.fecha,precio:currentDest.precio,nombre:n,apellido:a,ci,cel,email:document.getElementById('f-email').value.trim(),habitacion:document.getElementById('f-hab').value,personas:cant,nota:document.getElementById('f-nota').value.trim(),timestamp:new Date().toLocaleString('es-PY')};
+    reservations.push(r);
+    console.log('Reserva guardada:',JSON.stringify(r,null,2));
+    ['f-nombre','f-apellido','f-ci','f-cel','f-email','f-cant','f-nota'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-hab').value='';
+    document.getElementById('form-wrap').style.display='none';
+    document.getElementById('success-wrap').style.display='block';
+  }
+
+  function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+  function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+  function showPhotoNote(){alert('📸 Las fotos reales del destino se cargarán aquí cuando compartas los links de imágenes.');}
+</script>
+</body>
+</html>
